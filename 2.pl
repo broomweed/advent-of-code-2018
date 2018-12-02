@@ -1,11 +1,15 @@
 #!/usr/bin/perl
 
+use strict;
+use warnings;
 use v5.010;
 my @input = <>;
 chomp @input;
 
 # Part 1
 
+my $twos = 0;
+my $threes = 0;
 for (@input) {
     $twos ++ if contains($_, 2);
     $threes ++ if contains($_, 3);
@@ -24,8 +28,8 @@ sub contains {
 
 # Part 2
 
-for $one (@input) {
-    for $two (@input) {
+for my $one (@input) {
+    for my $two (@input) {
         die difference($one, $two) . "\n" if differing($one, $two) == 1;
     }
 }
@@ -39,7 +43,7 @@ sub differing {
     return $count;
 }
 
-sub difference{
+sub difference {
     my ($one, $two) = @_;
     my $diff = "";
     for my $idx (0..length $one) {
