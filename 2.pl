@@ -28,17 +28,16 @@ for my $one (@input) {
     }
 }
 
-sub zip {
-    my ($a, $b) = @_;
-    return map { [$a->[$_], $b->[$_]] } 0..$#$a;
-}
-
 sub differing {
-    my @pairs = zip([split //, $_[0]], [split //, $_[1]]);
-    return grep { $_->[0] ne $_->[1] } @pairs;
+    return grep { $_->[0] ne $_->[1] } zip_strs($_[0], $_[1]);
 }
 
 sub difference {
-    my @pairs = zip([split //, $_[0]], [split //, $_[1]]);
-    return join '', map { $_->[0] } grep { $_->[0] eq $_->[1] } @pairs;
+    return join '', map { $_->[0] } grep { $_->[0] eq $_->[1] } zip_strs($_[0], $_[1]);
+}
+
+sub zip_strs {
+    my @a = split //, $_[0];
+    my @b = split //, $_[1];
+    return map { [$a[$_], $b[$_]] } 0..$#a;
 }
