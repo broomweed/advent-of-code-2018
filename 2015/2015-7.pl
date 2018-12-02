@@ -4,6 +4,9 @@ use v5.010;
 use strict;
 use warnings;
 
+my $print = $ARGV[0] eq "--debug";
+shift if $print;
+
 my @instrs = grep {$_ ne "\n"} <>;
 my %wires;
 
@@ -21,7 +24,7 @@ for (@instrs) {
     }
 }
 
-#our $prefix = "";
+our $prefix = "";
 
 my %wirevals;
 
@@ -29,23 +32,23 @@ sub val {
     my $wire = shift;
 
     if (exists $wirevals{$wire}) {
-        #say $prefix, "$wire = $wirevals{$wire} (cached)";
+        say $prefix, "$wire = $wirevals{$wire} (cached)" if $print;
         return $wirevals{$wire};
     }
 
     return $wire if $wire =~ /^\d+$/;
 
     if ($wires{$wire} =~ /^\d+$/) {
-        #say $prefix, "$wire = $wires{$wire}";
+        say $prefix, "$wire = $wires{$wire}" if $print;
         return $wires{$wire};
     }
 
-    #say $prefix, "$wire = $wires{$wire} {";
+    say $prefix, "$wire = $wires{$wire} {" if $print;
 
     my $val;
 
     {
-        #local $prefix = " `" . $prefix;
+        local $prefix = " " . $prefix;
 
         if ($wires{$wire} =~ /^([^ ]+)$/) {
             my $a = $1;
@@ -72,11 +75,20 @@ sub val {
 
     $val &= 0xffff;
 
-    #say $prefix, "} $wire = $wires{$wire} = $val";
+    say $prefix, "} $wire = $wires{$wire} = $val" if $print;
 
     $wirevals{$wire} = $val;
 
     return $val;
 }
+
+my $aval = val('a');
+
+say $aval;
+
+# Part 2
+$wires{b} = $aval;
+
+%wirevals = (); # reset cache
 
 say val('a');
