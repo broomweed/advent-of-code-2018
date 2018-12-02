@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+# Run like: ./1.pl <input>
+# Can also take input from stdin thanks to ~the magic of Perl~
+
 use strict;
 use warnings;
 use List::Util qw( sum );
