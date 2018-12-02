@@ -3,27 +3,21 @@
 use strict;
 use warnings;
 use v5.010;
+
 my @input = <>;
 chomp @input;
 
 # Part 1
 
-my $twos = 0;
-my $threes = 0;
-for (@input) {
-    $twos ++ if contains($_, 2);
-    $threes ++ if contains($_, 3);
-}
+my $twos = grep{ contains($_, 2) } @input;
+my $threes = grep { contains($_, 3) } @input;
 
 say $twos * $threes;
 
 sub contains {
     my ($str, $num) = @_;
-    for my $ch (split //, $str) {
-        my @matches = ($str =~ /($ch)/g);
-        return 1 if (scalar @matches) == $num;
-    }
-    return 0;
+    my @sames = map { my @match = ($str =~ /($_)/g); scalar @match } split //, $str;
+    return scalar grep { $_ == $num } @sames;
 }
 
 # Part 2
@@ -34,20 +28,17 @@ for my $one (@input) {
     }
 }
 
+sub zip {
+    my ($a, $b) = @_;
+    return map { [$a->[$_], $b->[$_]] } 0..$#$a;
+}
+
 sub differing {
-    my ($one, $two) = @_;
-    my $count = 0;
-    for my $idx (0..length $one) {
-        $count ++ if (substr $two, $idx, 1) ne (substr $one, $idx, 1);
-    }
-    return $count;
+    my @pairs = zip([split //, $_[0]], [split //, $_[1]]);
+    return grep { $_->[0] ne $_->[1] } @pairs;
 }
 
 sub difference {
-    my ($one, $two) = @_;
-    my $diff = "";
-    for my $idx (0..length $one) {
-        $diff .= (substr $two, $idx, 1) if (substr $two, $idx, 1) eq (substr $one, $idx, 1);
-    }
-    return $diff;
+    my @pairs = zip([split //, $_[0]], [split //, $_[1]]);
+    return join '', map { $_->[0] } grep { $_->[0] eq $_->[1] } @pairs;
 }
