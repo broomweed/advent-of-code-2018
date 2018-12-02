@@ -17,7 +17,7 @@ say $twos * $threes;
 sub contains {
     my ($str, $num) = @_;
     my @sames = map { my @match = ($str =~ /($_)/g); scalar @match } split //, $str;
-    return scalar grep { $_ == $num } @sames;
+    return grep { $_ == $num } @sames;
 }
 
 # Part 2
