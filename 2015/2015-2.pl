@@ -1,6 +1,8 @@
 #!/usr/bin/perl
-use v5.010;
+use v5.012;
 use List::Util qw( sum min product );
+
+my (@dims, $total, $total2);
 
 while (<>) {
     next if $_ eq "\n";
