@@ -6,12 +6,6 @@ use v5.12;
 
 my %fabric = ();
 
-for my $x (0..1000) {
-    for my $y (0..1000) {
-        $fabric{$x,$y} = 0;
-    }
-}
-
 my @claims = <>;
 
 for my $claim (@claims) {
