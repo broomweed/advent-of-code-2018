@@ -34,16 +34,14 @@ for my $line (@lines) {
 
 {
     my $maxguard = reduce { (sum @{$guards{$a}}) > (sum @{$guards{$b}}) ? $a : $b } keys %guards;
-    my @maxguardmins = @{$guards{$maxguard}};
-    my $maxmin = reduce { $maxguardmins[$a] > $maxguardmins[$b] ? $a : $b } 0..$#maxguardmins;
-    say $maxguard * $maxmin;
+    my $maxminute = reduce { $guards{$maxguard}[$a] > $guards{$maxguard}[$b] ? $a : $b } 0..$#{$guards{$maxguard}};
+    say $maxguard * $maxminute;
 }
 
 # Part 2
 
 {
     my $maxguard = reduce { (max @{$guards{$a}}) > (max @{$guards{$b}}) ? $a : $b } keys %guards;
-    my @maxguardmins = @{$guards{$maxguard}};
-    my $maxmin = reduce { $maxguardmins[$a] > $maxguardmins[$b] ? $a : $b } 0..$#maxguardmins;
-    say $maxguard * $maxmin;
+    my $maxminute = reduce { $guards{$maxguard}[$a] > $guards{$maxguard}[$b] ? $a : $b } 0..$#{$guards{$maxguard}};
+    say $maxguard * $maxminute;
 }
