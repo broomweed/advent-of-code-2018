@@ -16,6 +16,12 @@ my $asleep_time;
 
 my %guards;
 
+sub incr {
+    for my $idx (0..$#_) {
+        $_[$idx]++;
+    }
+}
+
 for my $line (@lines) {
     $line =~ /\[.+ ..:(\d\d)]/;
     my $minute = $1;
@@ -25,7 +31,7 @@ for my $line (@lines) {
     } elsif ($line =~ /falls asleep/) {
         $asleep_time = $minute;
     } elsif ($line =~ /wakes up/) {
-        @{ $guards{$guard} }[$asleep_time..$minute-1] = map { $_ + 1 } @{ $guards{$guard} }[$asleep_time..$minute-1];
+        incr @{ $guards{$guard} }[$asleep_time..$minute-1];
     }
 }
 
@@ -33,11 +39,8 @@ for my $line (@lines) {
 
 {
     my $maxguard = reduce { (sum @{$guards{$a}}) > (sum @{$guards{$b}}) ? $a : $b } keys %guards;
-
     my @maxguardmins = @{$guards{$maxguard}};
-
     my $maxmin = reduce { $maxguardmins[$a] > $maxguardmins[$b] ? $a : $b } 0..$#maxguardmins;
-
     say $maxguard * $maxmin;
 }
 
@@ -45,10 +48,7 @@ for my $line (@lines) {
 
 {
     my $maxguard = reduce { (max @{$guards{$a}}) > (max @{$guards{$b}}) ? $a : $b } keys %guards;
-
     my @maxguardmins = @{$guards{$maxguard}};
-
     my $maxmin = reduce { $maxguardmins[$a] > $maxguardmins[$b] ? $a : $b } 0..$#maxguardmins;
-
     say $maxguard * $maxmin;
 }
