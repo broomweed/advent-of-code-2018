@@ -12,12 +12,6 @@ my %guards;
 my $guard;
 my $asleep_time;
 
-sub incr {
-    for my $idx (0..$#_) {
-        $_[$idx]++;
-    }
-}
-
 for my $line (@lines) {
     $line =~ /\[.+ ..:(\d\d)]/;
     my $minute = $1;
@@ -27,7 +21,7 @@ for my $line (@lines) {
     } elsif ($line =~ /falls asleep/) {
         $asleep_time = $minute;
     } elsif ($line =~ /wakes up/) {
-        incr @{ $guards{$guard} }[$asleep_time..$minute-1];
+        $guards{$guard}[$_]++ for $asleep_time..$minute-1;
     }
 }
 
