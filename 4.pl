@@ -4,17 +4,12 @@ use v5.12;
 use warnings;
 use List::Util qw( sum reduce max );
 
-my @lines = <>;
+my @lines = sort { $a cmp $b } <>;
 
-chomp @lines;
-@lines = grep {$_} @lines;
-
-@lines = sort { $a cmp $b } @lines;
+my %guards;
 
 my $guard;
 my $asleep_time;
-
-my %guards;
 
 sub incr {
     for my $idx (0..$#_) {
