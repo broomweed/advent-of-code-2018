@@ -5,17 +5,16 @@ use warnings;
 use List::Util qw( min );
 
 my $input;
-{   local $/ = undef;
+{
+    local $/ = undef;
     $input = <>;
 }
 chomp $input;
 
 my @polymer = split //, $input;
 
-sub revcase {
-    my $x = shift;
-    $x =~ tr/a-zA-Z/A-Za-z/;
-    return $x;
+sub oppositecase {
+    return lc $_[0] eq lc $_[1] && $_[0] ne $_[1];
 }
 
 # Part 1
@@ -25,8 +24,8 @@ sub react {
     loop: while () {
         my $changed = 0;
         my $i = 1;
-        while ($i <= $#polymer) {
-            while ($i < @polymer and $polymer[$i] eq revcase($polymer[$i-1])) {
+        while ($i < @polymer) {
+            while ($i < @polymer and oppositecase $polymer[$i], $polymer[$i-1]) {
                 $changed ++;
                 splice @polymer, $i-1, 2;
             }
@@ -42,12 +41,4 @@ say scalar @polymer;
 
 # Part 2
 
-my %removes;
-
-for my $remove ('a'..'z') {
-    my @altered = grep { $_ ne $remove and $_ ne uc $remove } @polymer;
-    $removes{$remove} = scalar react(@altered);
-    say "$remove: $removes{$remove}";
-}
-
-say min values %removes;
+say min map { my $remove = $_; scalar react(grep { $_ ne $remove and $_ ne uc $remove } @polymer) } 'a'..'z';
