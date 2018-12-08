@@ -38,7 +38,6 @@ sub tasktime {
 
 {
     my %completed;
-    my @completed;
     my $time = 0;
     my $nworkers = 5;
 
