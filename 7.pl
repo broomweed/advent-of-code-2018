@@ -3,6 +3,9 @@
 use v5.12;
 use List::AllUtils qw( all none );
 
+my $verbose = grep { $_ eq '-v' } @ARGV;
+@ARGV = grep { $_ ne '-v' } @ARGV;
+
 my @input = <>;
 
 my %prereqs;
@@ -45,7 +48,7 @@ sub tasktime {
     my @tasktimes = (0) x $nworkers;
 
     my $cols_width = @workers * 2 - 1;
-    printf "%5s %-${cols_width}s %s\n", "TIME", "WORKERS", "COMPLETED";
+    printf "%5s %-${cols_width}s %s\n", "TIME", "WORKERS", "COMPLETED" if $verbose;
 
     do {
         for my $worker (0..$#workers) {
@@ -61,7 +64,7 @@ sub tasktime {
                 }
             }
         }
-        printf "%5d %${cols_width}s %s\n", $time, (join ' ', @workers), (join '', map {lc} sort keys %completed);
+        printf "%5d %${cols_width}s %s\n", $time, (join ' ', @workers), (join '', map {lc} sort keys %completed) if $verbose;
         $time++;
     } until (all { $_ eq '.' } @workers);
 

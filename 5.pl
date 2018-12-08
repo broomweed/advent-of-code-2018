@@ -4,6 +4,9 @@ use v5.12;
 use warnings;
 use List::Util qw( min );
 
+my $verbose = grep { $_ eq '-v' } @ARGV;
+@ARGV = grep { $_ ne '-v' } @ARGV;
+
 my $input;
 {
     local $/ = undef;
@@ -41,4 +44,13 @@ say scalar @polymer;
 
 # Part 2
 
-say min map { my $remove = $_; scalar react(grep { $_ ne $remove and $_ ne uc $remove } @polymer) } 'a'..'z';
+if (not $verbose) {
+    say min map { my $remove = $_; scalar react(grep { $_ ne $remove and $_ ne uc $remove } @polymer) } 'a'..'z';
+} else {
+    say min map {
+        my $remove = $_;
+        my $result = scalar react(grep { $_ ne $remove and $_ ne uc $remove } @polymer);
+        say "without $remove: $result";
+        $result;
+    } 'a'..'z';
+}

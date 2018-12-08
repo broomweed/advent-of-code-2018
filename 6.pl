@@ -3,6 +3,9 @@
 use v5.12;
 use List::AllUtils qw( minmax min max_by sum );
 
+my $verbose = grep { $_ eq '-v' } @ARGV;
+@ARGV = grep { $_ ne '-v' } @ARGV;
+
 my @coords = <>;
 
 @coords = map { /(\d+), (\d+)/; [$1, $2] } @coords;
@@ -50,23 +53,30 @@ for my $x ($minx..$maxx) {
         my $dist = sum map { manhattan($x, $y, $coords[$_][0], $coords[$_][1]) } 0..$#coords;
         $part2count++ if $dist < 10000;
 
-        my $percent = ($x-$minx)/($maxx-$minx);
-        my $progbarlength = sprintf "%.0f", $percent * 20;
-        printf "\rScanning all points: [%s%s] | Closest:%5s | Part2-Points:%6s", "#" x $progbarlength, " " x (20-$progbarlength), $closest{$x,$y}, $part2count;
+        if ($verbose) {
+            my $percent = ($x-$minx)/($maxx-$minx);
+            my $progbarlength = sprintf "%.0f", $percent * 20;
+            printf "\rScanning all points: [%s%s] | Closest:%5s | Part2-Points:%6s", "#" x $progbarlength, " " x (20-$progbarlength), $closest{$x,$y}, $part2count;
+        }
     }
 }
 
-print "\nFinding biggest non-infinite area...";
+print "\nFinding biggest non-infinite area..." if $verbose;
 
 my $maxpt = max_by {
     my $pt = $_;
-    print "\n" if $pt % 5 == 0;
-    printf "%3d%-16s", $pt, " is infinite" and return 0 if defined $infinite{$pt};
+    print "\n" if $pt % 5 == 0 and $verbose;
+    if (defined $infinite{$pt}) {
+        printf "%3d%-16s", $pt, " is infinite" if $verbose;
+        return 0;
+    }
     my $size = scalar grep { $_ eq $pt } values %closest;
-    printf "%3d%-16s", $pt, " has size $size";
+    printf "%3d%-16s", $pt, " has size $size" if $verbose;
     return $size;
 } 0..$#coords;
 
-say "\n", scalar grep { $_ eq $maxpt } values %closest, " " x 70;
+say "" if $verbose;
+
+say scalar grep { $_ eq $maxpt } values %closest, " " x 70;
 
 say $part2count;
