@@ -10,15 +10,6 @@ my @coords = <>;
 my ($minx, $maxx) = minmax map { $_->[0] } @coords;
 my ($miny, $maxy) = minmax map { $_->[1] } @coords;
 
-my $height = $maxy - $miny;
-my $width = $maxx - $minx;
-
-# make the playing field big enough so everything at edge goes forever
-$minx -= $width;
-$miny -= $height;
-$maxx += $width;
-$maxy += $height;
-
 my %closest;
 my %infinite;
 
@@ -26,8 +17,6 @@ sub manhattan {
     my ($x1, $y1, $x2, $y2) = @_;
     return abs($x1 - $x2) + abs($y1 - $y2);
 }
-
-say "brute force yeah";
 
 my $part2count = 0;
 
