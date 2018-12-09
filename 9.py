@@ -2,9 +2,6 @@
 
 import sys
 
-# Sorry Perl, your arrays are too slow and you don't have
-# a good way to make a linked list :(
-
 class Marble:
     def __init__(self, val):
         self.val = val
