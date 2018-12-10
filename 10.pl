@@ -43,7 +43,7 @@ while () {
     $oldstr = $str;
     $str = show_points();
 
-    if (length $oldstr < length $str) {
+    if ($oldstr ne $str) {
         # if they've started moving apart again, last one might be the right answer
         say $oldstr;
         say "**************";
