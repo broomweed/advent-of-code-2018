@@ -42,11 +42,6 @@ for my $size (1..$maxsize) {
             $pls{$x,$y,$size} = $total;
         }
     }
-
-    if ($size % 50 == 0) {
-        my $bestkey = max_by { $pls{$_} } keys %pls;
-        say "Best so far: ", (join ', ', split $;, $bestkey), " => ", $pls{$bestkey};
-    }
 }
 
 my $bestkey = max_by { $pls{$_} } keys %pls;
