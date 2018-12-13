@@ -6,7 +6,7 @@ use List::AllUtils qw/ sum /;
 
 # Pass '20' as first argument for part 1,
 # '50000000000' as first argument for part 2.
-my $generations = shift;
+my $generations = shift or die "specify # of generations\n";
 
 my @input = <>;
 chomp @input;
@@ -24,7 +24,7 @@ for my $rule (@input) {
 }
 
 my $offset = 0;
-say "0: $state";
+say " " x 9, "0: $state";
 
 my $iters = 0;
 my $oldstr = '';
