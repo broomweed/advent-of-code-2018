@@ -40,9 +40,9 @@ while (1) {
         $elves[$i] %= @recipes;
     }
 
-    if ($verbose and ++$iters % 10 == 0) {
-        print ("\r", scalar @recipes);
+    if ($verbose and ++$iters % 30 == 0) {
+        printf "\r%.1f million recipes", @recipes / 1_000_000;
     }
 }
 
-say "\r", index ((join '', @recipes), $num), " ";
+say "\n", index ((join '', @recipes), $num);
