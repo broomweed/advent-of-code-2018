@@ -3,6 +3,7 @@
 use v5.12;
 use warnings;
 use List::Util qw( sum reduce max );
+use List::UtilsBy qw( max_by );
 
 my @lines = sort { $a cmp $b } <>;
 
@@ -10,12 +11,6 @@ my %guards;
 
 my $guard;
 my $asleep_time;
-
-sub incr {
-    for my $idx (0..$#_) {
-        $_[$idx]++;
-    }
-}
 
 for my $line (@lines) {
     $line =~ /\[.+ ..:(\d\d)]/;
@@ -26,22 +21,22 @@ for my $line (@lines) {
     } elsif ($line =~ /falls asleep/) {
         $asleep_time = $minute;
     } elsif ($line =~ /wakes up/) {
-        incr @{ $guards{$guard} }[$asleep_time..$minute-1];
+        $guards{$guard}[$_]++ for $asleep_time..$minute-1;
     }
 }
 
 # Part 1
 
 {
-    my $maxguard = reduce { (sum @{$guards{$a}}) > (sum @{$guards{$b}}) ? $a : $b } keys %guards;
-    my $maxminute = reduce { $guards{$maxguard}[$a] > $guards{$maxguard}[$b] ? $a : $b } 0..$#{$guards{$maxguard}};
+    my $maxguard = max_by { sum @{$guards{$_}} } keys %guards;
+    my $maxminute = max_by { $guards{$maxguard}[$_] } 0..59;
     say $maxguard * $maxminute;
 }
 
 # Part 2
 
 {
-    my $maxguard = reduce { (max @{$guards{$a}}) > (max @{$guards{$b}}) ? $a : $b } keys %guards;
-    my $maxminute = reduce { $guards{$maxguard}[$a] > $guards{$maxguard}[$b] ? $a : $b } 0..$#{$guards{$maxguard}};
+    my $maxguard = max_by { max @{$guards{$_}} } keys %guards;
+    my $maxminute = max_by { $guards{$maxguard}[$_] } 0..59;
     say $maxguard * $maxminute;
 }
