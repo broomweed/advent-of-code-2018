@@ -41,7 +41,6 @@ sub waterfall {
     no warnings 'recursion';
 
     my ($x, $y) = @_;
-    print "\r$x, $y     ";
 
     return if $y > $bottom;
 
