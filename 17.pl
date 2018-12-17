@@ -23,8 +23,6 @@ my %pipes;
 
 waterfall(500,0);
 
-say "";
-
 my $txt;
 
 for my $y ($top..$bottom) {
