@@ -4,6 +4,9 @@ use v5.12;
 use warnings;
 use List::AllUtils qw/ minmax uniq /;
 
+my $verbose = grep { $_ eq '-v' } @ARGV;
+@ARGV = grep { $_ ne '-v' } @ARGV;
+
 my @input = <>;
 
 my %clay;
@@ -32,6 +35,7 @@ for my $y ($top..$bottom) {
     $txt .= "\n";
 }
 
+say $txt if $verbose;
 say scalar grep { $_ eq '|' or $_ eq '~' } split //, $txt;
 say scalar grep { $_ eq '~' } split //, $txt;
 
