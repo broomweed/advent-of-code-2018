@@ -17,9 +17,7 @@ for (@input) {
 }
 
 my ($top, $bottom) = minmax map { (split $;, $_)[1] } keys %clay;
-say "top: $top, bottom: $bottom";
-
-$clay{500,0} = '+';
+my ($left, $right) = minmax map { (split $;, $_)[0] } keys %clay;
 
 my %pipes;
 
@@ -27,17 +25,17 @@ waterfall(500,0);
 
 say "";
 
-for my $y (0..$bottom) {
-    for my $x (425..650) {
-        print $clay{$x,$y} // $pipes{$x,$y} // '.';
+my $txt;
+
+for my $y ($top..$bottom) {
+    for my $x ($left-1..$right+1) {
+        $txt .= $clay{$x,$y} // $pipes{$x,$y} // '.';
     }
-    print "\n";
+    $txt .= "\n";
 }
 
-say "standing: ", scalar grep { (split $;, $_)[1] >= $top } uniq (grep { $clay{$_} eq '~' } keys %clay);
-say "flowing: ", scalar grep { (split $;, $_)[1] >= $top } uniq (keys %pipes);
-
-say scalar grep { (split $;, $_)[1] >= $top } uniq (keys %pipes, grep { $clay{$_} eq '~' } keys %clay);
+say $txt;
+say scalar grep { $_ eq '|' or $_ eq '~' } split //, $txt;
 
 sub waterfall {
     no warnings 'recursion';
