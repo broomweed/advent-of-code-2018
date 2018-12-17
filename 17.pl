@@ -34,8 +34,8 @@ for my $y ($top..$bottom) {
     $txt .= "\n";
 }
 
-say $txt;
 say scalar grep { $_ eq '|' or $_ eq '~' } split //, $txt;
+say scalar grep { $_ eq '~' } split //, $txt;
 
 sub waterfall {
     no warnings 'recursion';
