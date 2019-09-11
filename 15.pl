@@ -4,8 +4,6 @@ use strict;
 use warnings;
 use v5.012;
 
-use Data::Dumper;
-
 use List::AllUtils qw/max any none min sum uniq_by/;
 
 my %input = ();
@@ -94,11 +92,12 @@ sub do_combat {
                 my $current_distance = 0;
                 my @reachable_targets = ();
                 # we go until we find an enemy, or until we run out of squares to check
-                # we sort of 'expand outward' from our unit's position, by finding all adjacent squares
+                # breadth-first search from our unit's position, by finding all adjacent squares
                 # to the last set we checked (which is @outer_ring); we then remove already-checked
                 # squares so we get all adjacent squares we haven't looked at yet.
                 # We stop when we run out of squares (i.e. no possible path to enemy) or when we
-                # find an enemy-adjacent square to move to.
+                # find at least one enemy-adjacent square to move to (since it'll be guaranteed to
+                # be the closest one.... if it weren't, we'd have found a different one first)
                 while (@outer_ring && !@reachable_targets) {
                     # Fill in the current outer ring with the current distance away from the target
                     @distances{map { join $;, @$_ } @outer_ring} = ($current_distance) x @outer_ring;
@@ -134,9 +133,10 @@ sub do_combat {
                 while (@outer_ring) {
                     @distances{map { join $;, @$_ } @outer_ring} = ($current_distance) x @outer_ring;
                     # find all squares adjacent to us that we haven't looked at yet
-                    @outer_ring = uniq_by { join $;, @$_ } map { adjacent_squares(@$_) } @outer_ring;
-                    @outer_ring = grep { not exists $distances{join $;, @$_} } @outer_ring;
                     @outer_ring = grep { open_square(@$_) } @outer_ring;
+                                  grep { not exists $distances{join $;, @$_} }
+                               uniq_by { join $;, @$_ }
+                                   map { adjacent_squares(@$_) } @outer_ring;
                     $current_distance ++;
                 }
 
