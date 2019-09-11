@@ -133,7 +133,7 @@ sub do_combat {
                 while (@outer_ring) {
                     @distances{map { join $;, @$_ } @outer_ring} = ($current_distance) x @outer_ring;
                     # find all squares adjacent to us that we haven't looked at yet
-                    @outer_ring = grep { open_square(@$_) } @outer_ring;
+                    @outer_ring = grep { open_square(@$_) }
                                   grep { not exists $distances{join $;, @$_} }
                                uniq_by { join $;, @$_ }
                                    map { adjacent_squares(@$_) } @outer_ring;
